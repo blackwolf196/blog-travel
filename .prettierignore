@@ -1,0 +1,15 @@
+# Ignore artifacts:
+build
+coverage
+.next
+node_modules
+
+# Ignore all HTML files:
+**/*.html
+
+# Ignore package files:
+package.json
+package-lock.json
+
+# Ignore README
+README.md
