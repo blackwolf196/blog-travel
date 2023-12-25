@@ -7,6 +7,7 @@ const Styled = styled.div`
     font-family: 'Pacifico', sans-serif !important;
   }
 
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,8 +35,9 @@ const Styled = styled.div`
     margin: 15px 0;
   }
 
-  button {
+  .ant-btn {
     border-radius: 20px;
+    height: 40px;
     border: 1px solid #ff4b2b;
     background-color: #ff4b2b;
     color: #ffffff;
@@ -54,14 +56,32 @@ const Styled = styled.div`
       outline: none;
     }
 
-    &:hover {
-      cursor: pointer;
-    }
-  }
+    &.btn-signin-form {
+      &:active {
+        border: 1px solid #ff4b2b !important;
+        color: #fff !important;
+      }
 
-  button.ghost {
-    background-color: transparent;
-    border-color: #ffffff;
+      &:hover {
+        border: 1px solid #ff4b2b !important;
+        color: #fff !important;
+      }
+    }
+
+    &.btn-signup {
+      background-color: transparent;
+      border-color: #ffffff;
+
+      &:hover {
+        border: 1px solid #fff !important;
+        color: #fff !important;
+      }
+
+      &:active {
+        border: 1px solid #fff !important;
+        color: #fff !important;
+      }
+    }
   }
 
   .form {
@@ -102,8 +122,8 @@ const Styled = styled.div`
       0 10px 10px rgba(0, 0, 0, 0.22);
     position: relative;
     overflow: hidden;
-    width: 768px;
-    max-width: 100%;
+    width: 830px;
+    max-width: 90%;
     min-height: 480px;
   }
 
@@ -168,12 +188,8 @@ const Styled = styled.div`
   }
 
   .overlay {
-    background: #ff416c;
-    background: -webkit-linear-gradient(to right, #ff4b2b, #ff416c);
-    background: linear-gradient(to right, #ff4b2b, #ff416c);
-    background-repeat: no-repeat;
+    background: linear-gradient(to right, #ff4b2b, #ff416c) 0 0 no-repeat;
     background-size: cover;
-    background-position: 0 0;
     color: #ffffff;
     position: relative;
     left: -100%;
@@ -223,15 +239,37 @@ const Styled = styled.div`
     margin: 20px 0;
   }
 
-  .social-container a {
-    border: 1px solid #dddddd;
-    border-radius: 50%;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 5px;
-    height: 40px;
-    width: 40px;
+  .social-container {
+    .social {
+      border: 1px solid #dddddd;
+      border-radius: 50%;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 5px;
+      height: 40px;
+      width: 40px;
+      cursor: pointer;
+      animation-duration: 5s;
+
+      &.facebook {
+        &:hover {
+          color: #4267b2;
+        }
+      }
+
+      &.google {
+        &:hover {
+          color: #db4437;
+        }
+      }
+
+      &.linkedin {
+        &:hover {
+          color: #0077b5;
+        }
+      }
+    }
 
     .anticon {
       svg {
@@ -239,6 +277,10 @@ const Styled = styled.div`
         height: 1.5em !important;
       }
     }
+  }
+
+  .ant-form {
+    width: 100%;
   }
 `
 
