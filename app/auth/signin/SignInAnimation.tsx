@@ -1,16 +1,24 @@
 import {
   FacebookFilled,
-  GooglePlusCircleFilled,
+  GoogleCircleFilled,
   LinkedinFilled,
 } from '@ant-design/icons'
-import { Input } from 'antd'
+import { AuthTokenResponse } from '@supabase/gotrue-js'
+import { Button, Form, Input, message } from 'antd'
 import Styled from 'app/auth/signin/styled'
 import { useSupabase } from 'app/supabase-provider'
 import React, { useState } from 'react'
 
+interface loggedProps {
+  email: string
+  password: string
+}
+
 const SignInAnimation: React.FC = () => {
   const { supabase } = useSupabase()
+  const [form] = Form.useForm()
   const [isSignIn, setIsSignIn] = useState<boolean>(true)
+  const [loadingLogin, setLoadingLogin] = useState<boolean>(false)
 
   const SignInWithGoogle = () => {
     supabase.auth.signInWithOAuth({
@@ -31,55 +39,97 @@ const SignInAnimation: React.FC = () => {
   }
 
   const SignInWithEmail = () => {
-    supabase.auth.signInWithPassword({
-      email: '',
-      password: '',
+    setLoadingLogin(true)
+    form.validateFields().then(({ email, password }) => {
+      supabase.auth
+        .signInWithPassword({
+          email,
+          password,
+        })
+        .then((result: AuthTokenResponse) => {
+          setLoadingLogin(false)
+          if (result.error) {
+            message.error(result.error.message)
+          }
+        })
     })
   }
+
+  const FormLogin = (
+    <Form
+      form={form}
+      labelCol={{ span: 0 }}
+      wrapperCol={{ span: 24 }}
+      autoComplete={'off'}
+      initialValues={{
+        email: '',
+        password: '',
+      }}
+    >
+      <Form.Item<loggedProps>
+        name={'email'}
+        rules={[
+          { required: true, message: 'Please input your email' },
+          { type: 'email', message: 'Email is not valid' },
+        ]}
+      >
+        <Input placeholder={'Email'} />
+      </Form.Item>
+      <Form.Item<loggedProps>
+        name={'password'}
+        rules={[{ required: true, message: 'Please input your password' }]}
+      >
+        <Input.Password placeholder={'Password'} />
+      </Form.Item>
+    </Form>
+  )
 
   return (
     <Styled>
       <div className={`container ${isSignIn ? '' : 'right-panel-active'}`}>
-        <div className="form-container sign-up-container">
-          <div className={'form'}>
-            <div className={'main-title'}>Create Account</div>
-            <div className="social-container">
-              <a className="social">
-                <FacebookFilled />
-              </a>
-              <a className="social">
-                <GooglePlusCircleFilled />
-              </a>
-              <a className="social">
-                <LinkedinFilled />
-              </a>
-            </div>
-            <span>or use your email for registration</span>
-            <Input placeholder="Name" />
-            <Input placeholder="Email" />
-            <Input type="password" placeholder="Password" />
-            <button>Sign Up</button>
-          </div>
-        </div>
         <div className="form-container sign-in-container">
           <div className={'form'}>
             <div className={'main-title'}>Sign in</div>
             <div className="social-container">
-              <a className="social" onClick={SignInWithFacebook}>
-                <FacebookFilled />
+              <a className="social facebook" onClick={SignInWithFacebook}>
+                <FacebookFilled className={'facebook'} />
               </a>
-              <a className="social" onClick={SignInWithGoogle}>
-                <GooglePlusCircleFilled />
+              <a className="social google" onClick={SignInWithGoogle}>
+                <GoogleCircleFilled />
               </a>
-              <a className="social" onClick={SignInWithLinkedin}>
+              <a className="social linkedin" onClick={SignInWithLinkedin}>
                 <LinkedinFilled />
               </a>
             </div>
             <span>or use your account</span>
-            <Input placeholder="Email" />
-            <Input type="password" placeholder="Password" />
+            {FormLogin}
             <a href="#">Forgot your password?</a>
-            <button>Sign In</button>
+            <Button
+              className={'btn-signin-form'}
+              loading={loadingLogin}
+              onClick={SignInWithEmail}
+            >
+              Sign In
+            </Button>
+          </div>
+        </div>
+        <div className="form-container sign-up-container">
+          <div className={'form'}>
+            <div className={'main-title'}>Create Account</div>
+            <div className="social-container">
+              <a className="social facebook">
+                <FacebookFilled />
+              </a>
+              <a className="social google">
+                <GoogleCircleFilled />
+              </a>
+              <a className="social linkedin">
+                <LinkedinFilled />
+              </a>
+            </div>
+            <span>or use your email for registration</span>
+            {FormLogin}
+            <Button className={'btn-signin-form'}>Sign Up</Button>
           </div>
         </div>
         <div className="overlay-container">
@@ -89,24 +139,23 @@ const SignInAnimation: React.FC = () => {
               <p>
                 To keep connected with us please login with your personal info
               </p>
-              <button
-                className="ghost"
-                id="signIn"
+              <Button
+                className={'btn-signup'}
                 onClick={() => setIsSignIn(true)}
               >
                 Sign In
-              </button>
+              </Button>
             </div>
             <div className="overlay-panel overlay-right">
-              <div className={'welcome-text'}>Hello, Friend!</div>
-              <p>Enter your personal details and start journey with us</p>
-              <button
-                className="ghost"
+              <div className={'welcome-text'}>{`Don't have account ?`}</div>
+              <p>Create your account right here and start journey with us</p>
+              <Button
+                className={'btn-signup'}
                 id="signUp"
                 onClick={() => setIsSignIn(false)}
               >
                 Sign Up
-              </button>
+              </Button>
             </div>
           </div>
         </div>
