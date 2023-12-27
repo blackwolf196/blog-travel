@@ -1,6 +1,6 @@
 'use client'
 
-import { useSupabase } from '@/app/supabase-provider'
+import { useSupabase } from '@/provider/supabase-provider'
 import SignInAnimation from 'app/auth/signin/SignInAnimation'
 import { redirect } from 'next/navigation'
 

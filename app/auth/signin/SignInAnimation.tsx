@@ -1,3 +1,4 @@
+import { useSupabase } from '@/provider/supabase-provider'
 import {
   FacebookFilled,
   GoogleCircleFilled,
@@ -6,7 +7,6 @@ import {
 import { AuthTokenResponse } from '@supabase/gotrue-js'
 import { Button, Form, Input, message } from 'antd'
 import Styled from 'app/auth/signin/styled'
-import { useSupabase } from 'app/supabase-provider'
 import React, { useState } from 'react'
 
 interface loggedProps {
@@ -55,34 +55,44 @@ const SignInAnimation: React.FC = () => {
     })
   }
 
-  const FormLogin = (
-    <Form
-      form={form}
-      labelCol={{ span: 0 }}
-      wrapperCol={{ span: 24 }}
-      autoComplete={'off'}
-      initialValues={{
-        email: '',
-        password: '',
-      }}
-    >
-      <Form.Item<loggedProps>
-        name={'email'}
-        rules={[
-          { required: true, message: 'Please input your email' },
-          { type: 'email', message: 'Email is not valid' },
-        ]}
+  const FormLogin = (isSignUp: boolean) => {
+    const rulesPassword: any[] = [
+      { required: true, message: 'Please input your password' },
+    ]
+    if (isSignUp) {
+      rulesPassword.push({
+        pattern: '(?=.*[A-Z])(?=.*\\d).{8,}$',
+        message:
+          'Password must be at least 8 characters, with at least 1 UPPERCASE and 1 number.',
+      })
+    }
+
+    return (
+      <Form
+        form={form}
+        labelCol={{ span: 0 }}
+        wrapperCol={{ span: 24 }}
+        autoComplete={'off'}
+        initialValues={{
+          email: '',
+          password: '',
+        }}
       >
-        <Input placeholder={'Email'} />
-      </Form.Item>
-      <Form.Item<loggedProps>
-        name={'password'}
-        rules={[{ required: true, message: 'Please input your password' }]}
-      >
-        <Input.Password placeholder={'Password'} />
-      </Form.Item>
-    </Form>
-  )
+        <Form.Item<loggedProps>
+          name={'email'}
+          rules={[
+            { required: true, message: 'Please input your email' },
+            { type: 'email', message: 'Email is not valid' },
+          ]}
+        >
+          <Input placeholder={'Email'} />
+        </Form.Item>
+        <Form.Item<loggedProps> name={'password'} rules={rulesPassword}>
+          <Input.Password placeholder={'Password'} />
+        </Form.Item>
+      </Form>
+    )
+  }
 
   return (
     <Styled>
@@ -90,19 +100,19 @@ const SignInAnimation: React.FC = () => {
         <div className="form-container sign-in-container">
           <div className={'form'}>
             <div className={'main-title'}>Sign in</div>
-            <div className="social-container">
-              <a className="social facebook" onClick={SignInWithFacebook}>
-                <FacebookFilled className={'facebook'} />
-              </a>
-              <a className="social google" onClick={SignInWithGoogle}>
-                <GoogleCircleFilled />
-              </a>
-              <a className="social linkedin" onClick={SignInWithLinkedin}>
-                <LinkedinFilled />
-              </a>
-            </div>
-            <span>or use your account</span>
-            {FormLogin}
+            {/*<div className="social-container">*/}
+            {/*  <a className="social facebook" onClick={SignInWithFacebook}>*/}
+            {/*    <FacebookFilled className={'facebook'} />*/}
+            {/*  </a>*/}
+            {/*  <a className="social google" onClick={SignInWithGoogle}>*/}
+            {/*    <GoogleCircleFilled />*/}
+            {/*  </a>*/}
+            {/*  <a className="social linkedin" onClick={SignInWithLinkedin}>*/}
+            {/*    <LinkedinFilled />*/}
+            {/*  </a>*/}
+            {/*</div>*/}
+            {/*<span>or use your account</span>*/}
+            {FormLogin(false)}
             <a href="#">Forgot your password?</a>
             <Button
               className={'btn-signin-form'}
@@ -116,19 +126,19 @@ const SignInAnimation: React.FC = () => {
         <div className="form-container sign-up-container">
           <div className={'form'}>
             <div className={'main-title'}>Create Account</div>
-            <div className="social-container">
-              <a className="social facebook">
-                <FacebookFilled />
-              </a>
-              <a className="social google">
-                <GoogleCircleFilled />
-              </a>
-              <a className="social linkedin">
-                <LinkedinFilled />
-              </a>
-            </div>
-            <span>or use your email for registration</span>
-            {FormLogin}
+            {/*<div className="social-container">*/}
+            {/*  <a className="social facebook">*/}
+            {/*    <FacebookFilled />*/}
+            {/*  </a>*/}
+            {/*  <a className="social google">*/}
+            {/*    <GoogleCircleFilled />*/}
+            {/*  </a>*/}
+            {/*  <a className="social linkedin">*/}
+            {/*    <LinkedinFilled />*/}
+            {/*  </a>*/}
+            {/*</div>*/}
+            {/*<span>or use your email for registration</span>*/}
+            {FormLogin(true)}
             <Button className={'btn-signin-form'}>Sign Up</Button>
           </div>
         </div>

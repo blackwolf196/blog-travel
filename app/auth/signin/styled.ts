@@ -1,13 +1,8 @@
 import styled from 'styled-components'
 
 const Styled = styled.div`
-  @import url('https://fonts.googleapis.com/css?family=Pacifico:400,800');
-
-  * {
-    font-family: 'Pacifico', sans-serif !important;
-  }
-
   height: 100vh;
+  min-width: 900px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,6 +93,7 @@ const Styled = styled.div`
   .main-title {
     font-size: 26px;
     font-weight: bold;
+    margin-bottom: 24px;
   }
 
   input {
