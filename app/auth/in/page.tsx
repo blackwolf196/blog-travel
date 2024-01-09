@@ -1,7 +1,7 @@
 'use client'
 
 import { useSupabase } from '@/provider/supabase-provider'
-import SignInAnimation from 'app/auth/signin/SignInAnimation'
+import SignInAnimation from 'app/auth/in/SignInAnimation'
 import { redirect } from 'next/navigation'
 
 export default function SignIn() {

@@ -38,18 +38,9 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
   }
 
-  html,
   body {
-    max-width: 100vw;
-  }
-
-  body {
-    color: rgb(var(--foreground-rgb));
-    background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    ) rgb(var(--background-start-rgb));
+    color: #000;
+    background: rgb(230, 227, 227);
   }
 
   a {

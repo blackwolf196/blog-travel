@@ -2,28 +2,28 @@
 
 import { useSupabase } from '@/provider/supabase-provider'
 import { Button } from 'antd'
-import styles from 'app/page.module.css'
-import { redirect } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 
 const Home = () => {
-  const { supabase, session } = useSupabase()
-
+  const { supabase, session, userInfo } = useSupabase()
+  const router = useRouter()
   const LogOut = () => {
-    supabase.auth.signOut()
+    supabase.auth.signOut().then(() => {
+      router.push('/auth/in')
+    })
   }
 
   if (!session) {
-    return redirect('/auth/signin')
+    return redirect('/auth/in')
   }
+  // if (userInfo.first_login) {
+  //   return redirect('/home/user')
+  // }
 
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <Button onClick={LogOut}>Log out</Button>
-      </div>
-
-      <div className={styles.center}></div>
-    </main>
+    <div className={'home-page'}>
+      <Button onClick={LogOut}>Log out</Button>
+    </div>
   )
 }
 

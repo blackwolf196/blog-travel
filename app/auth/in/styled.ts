@@ -6,6 +6,7 @@ const Styled = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  user-select: none;
 
   h2 {
     text-align: center;
@@ -94,14 +95,12 @@ const Styled = styled.div`
     font-size: 26px;
     font-weight: bold;
     margin-bottom: 24px;
+    color: #000;
   }
 
-  input {
-    background-color: #eee;
-    border: none;
-    padding: 12px 15px;
-    margin: 8px 0;
+  .ant-input {
     width: 100%;
+    height: 36px;
   }
 
   .welcome-text {
@@ -118,9 +117,14 @@ const Styled = styled.div`
       0 10px 10px rgba(0, 0, 0, 0.22);
     position: relative;
     overflow: hidden;
-    width: 830px;
-    max-width: 90%;
     min-height: 480px;
+
+    @media screen and (min-width: 500px) {
+      width: 830px;
+      max-width: 90%;
+    }
+    width: calc(100vw * 2 - 10%);
+    max-width: 90%;
   }
 
   .form-container {
@@ -277,6 +281,15 @@ const Styled = styled.div`
 
   .ant-form {
     width: 100%;
+  }
+
+  .ant-form-item {
+    margin-bottom: 12px;
+
+    .ant-form-item-explain-error {
+      margin-bottom: 12px;
+      margin-top: 8px;
+    }
   }
 `
 

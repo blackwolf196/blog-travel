@@ -17,6 +17,9 @@ type SupabaseContext = {
   supabase: SupabaseClient<Database>
   session: Session | null
   appState: AppState
+  isAdmin: boolean
+  userInfo: any | null
+  setUserInfo: (userInfo: any) => void
 }
 
 const Context = createContext<SupabaseContext | undefined>(undefined)
@@ -32,18 +35,45 @@ export default function SupabaseProvider({
     isAuthenticated: false,
     isInitialized: false,
   })
+  const [isAdmin, setIsAdmin] = useState<boolean>(false)
+  const [userInfo, setUserInfo] = useState<any>(null)
   const router = useRouter()
 
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_, session) => {
+    } = supabase.auth.onAuthStateChange(async (_, session) => {
       if (session) {
         localStorage.set(appConfig.accessTokenName, session.access_token)
         setAppState({
           isAuthenticated: true,
           isInitialized: true,
         })
+        setSession(session)
+
+        const { data: checkAdmin } = await supabase.rpc('check_admin', {
+          input_user_id: session.user.id,
+        })
+        setIsAdmin(!!checkAdmin)
+
+        const { data: dataUser } = await supabase
+          .from('user_info')
+          .select('*')
+          .eq('user_id', session.user.id)
+        if (!dataUser?.length) {
+          const { data: dataInsertUser } = await supabase
+            .from('user_info')
+            .insert({
+              user_id: session.user.id,
+              first_login: true,
+            })
+            .select('*')
+          if (dataInsertUser?.length) {
+            setUserInfo(dataInsertUser[0])
+          }
+        } else {
+          setUserInfo(dataUser[0])
+        }
       } else {
         localStorage.remove(appConfig.accessTokenName)
         setAppState({
@@ -51,15 +81,17 @@ export default function SupabaseProvider({
           isInitialized: true,
         })
       }
-      setSession(session)
     })
+
     return () => {
       subscription.unsubscribe()
     }
   }, [router, supabase.auth])
 
   return (
-    <Context.Provider value={{ supabase, session, appState }}>
+    <Context.Provider
+      value={{ supabase, session, appState, isAdmin, userInfo, setUserInfo }}
+    >
       {appState.isInitialized && children}
     </Context.Provider>
   )

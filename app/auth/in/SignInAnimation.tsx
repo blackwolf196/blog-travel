@@ -3,11 +3,13 @@ import {
   FacebookFilled,
   GoogleCircleFilled,
   LinkedinFilled,
+  MailOutlined,
 } from '@ant-design/icons'
 import { AuthTokenResponse } from '@supabase/gotrue-js'
 import { Button, Form, Input, message } from 'antd'
-import Styled from 'app/auth/signin/styled'
-import React, { useState } from 'react'
+import Styled from 'app/auth/in/styled'
+import dayjs from 'dayjs'
+import React, { useEffect, useState } from 'react'
 
 interface loggedProps {
   email: string
@@ -16,9 +18,20 @@ interface loggedProps {
 
 const SignInAnimation: React.FC = () => {
   const { supabase } = useSupabase()
-  const [form] = Form.useForm()
+  const [formIn] = Form.useForm<loggedProps>()
+  const [formUp] = Form.useForm<loggedProps>()
   const [isSignIn, setIsSignIn] = useState<boolean>(true)
   const [loadingLogin, setLoadingLogin] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (isSignIn) {
+      formIn.resetFields()
+    } else {
+      formUp.resetFields()
+    }
+  }, [isSignIn])
+
+  const timeSpamp = dayjs().format('YYYYMMDDhhmmssSSS')
 
   const SignInWithGoogle = () => {
     supabase.auth.signInWithOAuth({
@@ -39,8 +52,8 @@ const SignInAnimation: React.FC = () => {
   }
 
   const SignInWithEmail = () => {
-    setLoadingLogin(true)
-    form.validateFields().then(({ email, password }) => {
+    formIn.validateFields().then(({ email, password }) => {
+      setLoadingLogin(true)
       supabase.auth
         .signInWithPassword({
           email,
@@ -55,24 +68,16 @@ const SignInAnimation: React.FC = () => {
     })
   }
 
-  const FormLogin = (isSignUp: boolean) => {
+  const FormLogin = () => {
     const rulesPassword: any[] = [
       { required: true, message: 'Please input your password' },
     ]
-    if (isSignUp) {
-      rulesPassword.push({
-        pattern: '(?=.*[A-Z])(?=.*\\d).{8,}$',
-        message:
-          'Password must be at least 8 characters, with at least 1 UPPERCASE and 1 number.',
-      })
-    }
 
     return (
       <Form
-        form={form}
+        form={formIn}
         labelCol={{ span: 0 }}
         wrapperCol={{ span: 24 }}
-        autoComplete={'off'}
         initialValues={{
           email: '',
           password: '',
@@ -85,10 +90,64 @@ const SignInAnimation: React.FC = () => {
             { type: 'email', message: 'Email is not valid' },
           ]}
         >
-          <Input placeholder={'Email'} />
+          <Input
+            placeholder={'Email'}
+            name={`email-in-not-fill-${timeSpamp}`}
+            autoComplete={'one-time-code'}
+            suffix={<MailOutlined />}
+          />
         </Form.Item>
         <Form.Item<loggedProps> name={'password'} rules={rulesPassword}>
-          <Input.Password placeholder={'Password'} />
+          <Input.Password
+            placeholder={'Password'}
+            name={`pwd-in-not-fill-${timeSpamp}`}
+            autoComplete={'one-time-code'}
+          />
+        </Form.Item>
+      </Form>
+    )
+  }
+
+  const FormSignUp = () => {
+    const rulesPassword: any[] = [
+      { required: true, message: 'Please input your password' },
+      {
+        pattern: '(?=.*[A-Z])(?=.*\\d).{8,}$',
+        message:
+          'Password must be at least 8 characters, with at least 1 UPPERCASE and 1 number.',
+      },
+    ]
+    return (
+      <Form
+        form={formUp}
+        labelCol={{ span: 0 }}
+        wrapperCol={{ span: 24 }}
+        autoComplete={'one-time-code'}
+        initialValues={{
+          email: '',
+          password: '',
+        }}
+      >
+        <Form.Item<loggedProps>
+          name={'email'}
+          rules={[
+            { required: true, message: 'Please input your email' },
+            { type: 'email', message: 'Email is not valid' },
+          ]}
+        >
+          <Input
+            placeholder={'Email'}
+            name={`email-up-not-fill-${timeSpamp}`}
+            autoComplete={'one-time-code'}
+            suffix={<MailOutlined />}
+          />
+        </Form.Item>
+        <Form.Item<loggedProps> name={'password'} rules={rulesPassword}>
+          <Input.Password
+            name={`pwd-up-not-fill-${timeSpamp}`}
+            placeholder={'Password'}
+            autoComplete={'one-time-code'}
+          />
         </Form.Item>
       </Form>
     )
@@ -112,7 +171,7 @@ const SignInAnimation: React.FC = () => {
             {/*  </a>*/}
             {/*</div>*/}
             {/*<span>or use your account</span>*/}
-            {FormLogin(false)}
+            {FormLogin()}
             <a href="#">Forgot your password?</a>
             <Button
               className={'btn-signin-form'}
@@ -138,7 +197,7 @@ const SignInAnimation: React.FC = () => {
             {/*  </a>*/}
             {/*</div>*/}
             {/*<span>or use your email for registration</span>*/}
-            {FormLogin(true)}
+            {FormSignUp()}
             <Button className={'btn-signin-form'}>Sign Up</Button>
           </div>
         </div>
