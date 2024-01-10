@@ -1,3 +1,4 @@
+import { AppStateProvider } from '@/provider/appStateProvider'
 import SupabaseProvider from '@/provider/supabase-provider'
 import GlobalStyled from 'app/globalStyled'
 import type { Metadata } from 'next'
@@ -16,7 +17,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="en">
       <GlobalStyled />
       <body className={inter.className}>
-        <SupabaseProvider>{children}</SupabaseProvider>
+        <SupabaseProvider>
+          <AppStateProvider>{children}</AppStateProvider>
+        </SupabaseProvider>
       </body>
     </html>
   )

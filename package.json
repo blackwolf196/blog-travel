@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "prepare": "husky install",
     "format": "prettier --write .",
-    "generate-types": "npx supabase gen types typescript --project-id ulduldvyyfanxdzwhrwz --schema private > types_db.ts"
+    "generate-types": "npx supabase gen types typescript --project-id ulduldvyyfanxdzwhrwz --schema public > types_db.ts"
   },
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
