@@ -2,23 +2,18 @@
 
 import { useSupabase } from '@/provider/supabase-provider'
 import { Button } from 'antd'
-import { redirect, useRouter } from 'next/navigation'
 
 const Home = () => {
-  const { supabase, session, userInfo } = useSupabase()
-  const router = useRouter()
+  const { supabase, setAppState, userInfo } = useSupabase()
   const LogOut = () => {
     supabase.auth.signOut().then(() => {
-      router.push('/auth/in')
+      setAppState({
+        isAuthenticated: false,
+        isInitialized: true,
+      })
+      // router.push('/auth/in');
     })
   }
-
-  if (!session) {
-    return redirect('/auth/in')
-  }
-  // if (userInfo.first_login) {
-  //   return redirect('/home/user')
-  // }
 
   return (
     <div className={'home-page'}>

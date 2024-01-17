@@ -6,9 +6,9 @@ import { redirect } from 'next/navigation'
 
 export default function SignIn() {
   const {
-    appState: { isAuthenticated, isInitialized },
+    appState: { isAuthenticated },
   } = useSupabase()
-  if (isAuthenticated && isInitialized) {
+  if (isAuthenticated) {
     return redirect('/home')
   }
 

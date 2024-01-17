@@ -7,10 +7,7 @@ interface AppState {
 }
 
 // Define action types
-type Action = {
-  type: 'setCount' | ''
-  value: any
-}
+type Action = { type: 'setCount'; value: number }
 
 // Create the context
 const AppStateContext = createContext<

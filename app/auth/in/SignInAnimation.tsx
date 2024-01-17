@@ -68,6 +68,18 @@ const SignInAnimation: React.FC = () => {
     })
   }
 
+  const handleKeyDownLogin = (e: any) => {
+    if (e.key === 'Enter') {
+      SignInWithEmail()
+    }
+  }
+
+  const handleKeyDownSignup = (e: any) => {
+    if (e.key === 'Enter') {
+      //
+    }
+  }
+
   const FormLogin = () => {
     const rulesPassword: any[] = [
       { required: true, message: 'Please input your password' },
@@ -82,6 +94,7 @@ const SignInAnimation: React.FC = () => {
           email: '',
           password: '',
         }}
+        onKeyDown={handleKeyDownLogin}
       >
         <Form.Item<loggedProps>
           name={'email'}
@@ -127,6 +140,7 @@ const SignInAnimation: React.FC = () => {
           email: '',
           password: '',
         }}
+        onKeyDown={handleKeyDownSignup}
       >
         <Form.Item<loggedProps>
           name={'email'}

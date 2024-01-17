@@ -17,6 +17,7 @@ type SupabaseContext = {
   supabase: SupabaseClient<Database>
   session: Session | null
   appState: AppState
+  setAppState: (appState: AppState) => void
   isAdmin: boolean
   userInfo: any | null
   setUserInfo: (userInfo: any) => void
@@ -86,11 +87,19 @@ export default function SupabaseProvider({
     return () => {
       subscription.unsubscribe()
     }
-  }, [router, supabase.auth])
+  }, [])
 
   return (
     <Context.Provider
-      value={{ supabase, session, appState, isAdmin, userInfo, setUserInfo }}
+      value={{
+        supabase,
+        session,
+        appState,
+        setAppState,
+        isAdmin,
+        userInfo,
+        setUserInfo,
+      }}
     >
       {appState.isInitialized && children}
     </Context.Provider>
