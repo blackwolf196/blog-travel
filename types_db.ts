@@ -9,13 +9,49 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      [_ in never]: never
+      user_info: {
+        Row: {
+          first_login: boolean
+          full_name: string | null
+          id: string
+          phone: string | null
+          user_id: string
+        }
+        Insert: {
+          first_login?: boolean
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          user_id: string
+        }
+        Update: {
+          first_login?: boolean
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'user_info_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_admin: {
+        Args: {
+          input_user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

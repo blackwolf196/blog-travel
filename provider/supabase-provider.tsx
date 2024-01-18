@@ -12,14 +12,16 @@ type AppState = {
   isInitialized: boolean
 }
 
+type UserProps = Database['public']['Tables']['user_info']['Row']
+
 type SupabaseContext = {
   supabase: SupabaseClient<Database>
   session: Session | null
   appState: AppState
   setAppState: (appState: AppState) => void
   isAdmin: boolean
-  userInfo: any | null
-  setUserInfo: (userInfo: any) => void
+  userInfo: UserProps | null
+  setUserInfo: (userInfo: UserProps) => void
 }
 
 const Context = createContext<SupabaseContext | undefined>(undefined)

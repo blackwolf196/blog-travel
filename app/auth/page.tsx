@@ -1,3 +1,5 @@
 import { redirect } from 'next/navigation'
 
-export default () => redirect('/auth/in')
+const AuthPage = () => redirect('/auth/in')
+
+export default AuthPage
