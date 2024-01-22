@@ -120,7 +120,7 @@ const Styled = styled.div`
     min-height: 480px;
 
     @media screen and (min-width: 500px) {
-      width: 830px;
+      width: 870px;
       max-width: 90%;
     }
     width: calc(100vw * 2 - 10%);
