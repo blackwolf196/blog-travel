@@ -186,7 +186,7 @@ const SignInAnimation: React.FC = () => {
             {/*</div>*/}
             {/*<span>or use your account</span>*/}
             {FormLogin()}
-            <a href="#">Forgot your password?</a>
+            <a href="/auth/forgot">Forgot your password?</a>
             <Button
               className={'btn-signin-form'}
               loading={loadingLogin}
