@@ -3,10 +3,10 @@
 import { useSupabase } from '@/provider/supabase-provider'
 import { MailOutlined } from '@ant-design/icons'
 import { Form, Input, message } from 'antd'
+import ChangeStyled from 'app/auth/change/change.styled'
 import Button from 'app/auth/components/button'
-import ForgotStyled from 'app/auth/forgot/forgot.styled'
-import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 interface forgotProps {
   email: string
@@ -16,19 +16,8 @@ const ForgotPassword = () => {
   const [formForgot] = Form.useForm<forgotProps>()
   const { supabase } = useSupabase()
   const router = useRouter()
-  const searchParams = useSearchParams()
 
   const [loading, setLoading] = useState<boolean>(false)
-
-  useEffect(() => {
-    const code = searchParams.get('code')
-    console.log(code)
-    if (code) {
-      supabase.auth
-        .exchangeCodeForSession(code)
-        .then((result) => console.log(result, 'exchange'))
-    }
-  }, [])
 
   const handleKeyDownForgot = (e: any) => {
     if (e.key === 'Enter') {
@@ -40,7 +29,7 @@ const ForgotPassword = () => {
     formForgot.validateFields().then(async ({ email }) => {
       setLoading(true)
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: 'http://localhost:3000/auth/forgot',
+        redirectTo: 'http://localhost:3000/auth/callback',
       })
       setLoading(false)
       if (error) {
@@ -58,7 +47,7 @@ const ForgotPassword = () => {
   }
 
   return (
-    <ForgotStyled>
+    <ChangeStyled>
       <div className={'forgot-container'}>
         <div className={'forgot-line'}>Forgot your password ?</div>
         <div className={'email-line'}>Enter your email address</div>
@@ -91,7 +80,7 @@ const ForgotPassword = () => {
           </div>
         </div>
       </div>
-    </ForgotStyled>
+    </ChangeStyled>
   )
 }
 
