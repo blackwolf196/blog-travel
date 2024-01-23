@@ -16,10 +16,16 @@ const ChangeStyled = styled.div`
       0 10px 10px rgba(0, 0, 0, 0.22);
     padding: 16px;
 
-    .change-line {
+    .email {
       text-align: center;
       font-size: 1.5em;
       margin-top: 32px;
+    }
+
+    .change-line {
+      text-align: center;
+      font-size: 1em;
+      margin-top: 16px;
     }
 
     .input-zone {

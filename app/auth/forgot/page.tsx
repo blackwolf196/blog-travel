@@ -22,7 +22,6 @@ const ForgotPassword = () => {
 
   useEffect(() => {
     const code = searchParams.get('code')
-    console.log(code)
     if (code) {
       supabase.auth
         .exchangeCodeForSession(code)
@@ -40,7 +39,7 @@ const ForgotPassword = () => {
     formForgot.validateFields().then(async ({ email }) => {
       setLoading(true)
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: 'http://localhost:3000/auth/forgot',
+        redirectTo: 'http://localhost:3000/auth/callback?next=/auth/change',
       })
       setLoading(false)
       if (error) {

@@ -5,7 +5,7 @@ import { LockOutlined } from '@ant-design/icons'
 import { Form, Input, message } from 'antd'
 import ChangeStyled from 'app/auth/change/change.styled'
 import Button from 'app/auth/components/button'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 interface changeProps {
@@ -14,26 +14,50 @@ interface changeProps {
 
 const ForgotPassword = () => {
   const [formChange] = Form.useForm<changeProps>()
-  const { supabase } = useSupabase()
+  const {
+    supabase,
+    session,
+    setAppState,
+    appState: { isAuthenticated },
+  } = useSupabase()
   const router = useRouter()
-
   const [loading, setLoading] = useState<boolean>(false)
-
   const handleKeyDown = (e: any) => {
     if (e.key === 'Enter') {
       submitChangePassword()
     }
   }
 
-  const submitChangePassword = () => {}
+  const submitChangePassword = () => {
+    formChange.validateFields().then(({ password }) => {
+      supabase.auth
+        .updateUser({
+          password,
+        })
+        .then(() => backToLogin())
+    })
+  }
 
   const backToLogin = () => {
-    router.push('/auth/in')
+    supabase.auth.signOut().then(() => {
+      setAppState({
+        isAuthenticated: false,
+        isInitialized: true,
+      })
+      router.push('/auth/in')
+    })
   }
+
+  // if (!isAuthenticated) {
+  //   redirect('/auth/in')
+  // }
 
   return (
     <ChangeStyled>
       <div className={'change-container'}>
+        {session ? (
+          <div className={'email'}>Hi, {session?.user?.email}</div>
+        ) : null}
         <div className={'change-line'}>Enter your new password</div>
         <div className={'input-zone'}>
           <Form form={formChange} onKeyDown={handleKeyDown}>
