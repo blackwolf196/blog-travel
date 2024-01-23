@@ -1,46 +1,31 @@
 'use client'
 
 import { useSupabase } from '@/provider/supabase-provider'
-import { MailOutlined } from '@ant-design/icons'
+import { LockOutlined } from '@ant-design/icons'
 import { Form, Input, message } from 'antd'
 import ChangeStyled from 'app/auth/change/change.styled'
 import Button from 'app/auth/components/button'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-interface forgotProps {
-  email: string
+interface changeProps {
+  password: string
 }
 
 const ForgotPassword = () => {
-  const [formForgot] = Form.useForm<forgotProps>()
+  const [formChange] = Form.useForm<changeProps>()
   const { supabase } = useSupabase()
   const router = useRouter()
 
   const [loading, setLoading] = useState<boolean>(false)
 
-  const handleKeyDownForgot = (e: any) => {
+  const handleKeyDown = (e: any) => {
     if (e.key === 'Enter') {
-      submitForgot()
+      submitChangePassword()
     }
   }
 
-  const submitForgot = () => {
-    formForgot.validateFields().then(async ({ email }) => {
-      setLoading(true)
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: 'http://localhost:3000/auth/callback',
-      })
-      setLoading(false)
-      if (error) {
-        message.error(error.toString())
-      } else {
-        message.success(
-          'Email has been sent. Please check inbox and follow to get your new password!'
-        )
-      }
-    })
-  }
+  const submitChangePassword = () => {}
 
   const backToLogin = () => {
     router.push('/auth/in')
@@ -48,30 +33,35 @@ const ForgotPassword = () => {
 
   return (
     <ChangeStyled>
-      <div className={'forgot-container'}>
-        <div className={'forgot-line'}>Forgot your password ?</div>
-        <div className={'email-line'}>Enter your email address</div>
+      <div className={'change-container'}>
+        <div className={'change-line'}>Enter your new password</div>
         <div className={'input-zone'}>
-          <Form form={formForgot} onKeyDown={handleKeyDownForgot}>
-            <Form.Item<forgotProps>
-              name={'email'}
+          <Form form={formChange} onKeyDown={handleKeyDown}>
+            <Form.Item<changeProps>
+              name={'password'}
               rules={[
-                { required: true, message: 'Please input your email' },
-                { type: 'email', message: 'Email is not valid' },
+                { required: true, message: 'Please input your password' },
+                {
+                  pattern: /(?=.*[A-Z])(?=.*\\d).{8,}$/,
+                  message:
+                    'Password must be at least 8 characters, with at least 1 UPPERCASE and 1 number.',
+                },
               ]}
             >
-              <Input
-                className={'input-email'}
-                prefix={<MailOutlined />}
-                placeholder={'Enter your email'}
+              <Input.Password
+                className={'input-password'}
+                prefix={<LockOutlined />}
+                placeholder={
+                  'Minimum 8 characters, at least 1 UPPERCASE and 1 number'
+                }
               />
             </Form.Item>
           </Form>
           <Button
             loading={loading}
             block
-            className={'btn-submit-forgot btn-primary'}
-            onClick={submitForgot}
+            className={'btn-submit-change btn-primary'}
+            onClick={submitChangePassword}
           >
             Submit
           </Button>

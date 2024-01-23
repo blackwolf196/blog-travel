@@ -17,23 +17,16 @@ const ChangeStyled = styled.div`
     padding: 16px;
 
     .change-line {
-      margin-top: 32px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 2em;
-    }
-
-    .email-line {
       text-align: center;
       font-size: 1.5em;
-      margin-top: 16px;
+      margin-top: 32px;
     }
 
     .input-zone {
       text-align: center;
     }
 
-    .input-email {
+    .input-password {
       margin-top: 16px;
       width: 480px;
       height: 48px;
@@ -54,6 +47,7 @@ const ChangeStyled = styled.div`
 
       &:hover {
         text-decoration: underline;
+        text-underline-offset: 4px;
       }
     }
   }
